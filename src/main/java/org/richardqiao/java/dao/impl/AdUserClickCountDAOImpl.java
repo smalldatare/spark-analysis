@@ -56,13 +56,16 @@ public class AdUserClickCountDAOImpl implements IAdUserClickCountDAO {
 
     // 执行批量插入
     String insertSQL = "INSERT INTO ad_user_click_count VALUES(?,?,?,?)";
-    List<Object[]> insertParamsList = new ArrayList<Object[]>();
+    List<Object[]> insertParamsList = new ArrayList<>();
 
     for (AdUserClickCount adUserClickCount : insertAdUserClickCounts) {
-      Object[] insertParams = new Object[] { adUserClickCount.getDate(), adUserClickCount.getUserid(),
-          adUserClickCount.getAdid(), adUserClickCount.getClickCount() };
+      Object[] insertParams = new Object[] { adUserClickCount.getDate(),
+          adUserClickCount.getUserid(),
+          adUserClickCount.getAdid(),
+          adUserClickCount.getClickCount() };
       insertParamsList.add(insertParams);
     }
+    System.out.println(insertSQL);
 
     jdbcHelper.executeBatch(insertSQL, insertParamsList);
 

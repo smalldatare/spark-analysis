@@ -1,5 +1,7 @@
 package org.richardqiao.java.util;
 
+import scala.Double;
+
 import java.math.BigDecimal;
 
 /**
@@ -13,13 +15,14 @@ public class NumberUtils {
   /**
    * 格式化小数
    * 
-   * @param str
+   * @param num
    *            字符串
    * @param scale
    *            四舍五入的位数
    * @return 格式化小数
    */
   public static double formatDouble(double num, int scale) {
+    if(num == Double.NaN() || num == Double.NegativeInfinity() || num == Double.PositiveInfinity()) return 0d;
     BigDecimal bd = new BigDecimal(num);
     return bd.setScale(scale, BigDecimal.ROUND_HALF_UP).doubleValue();
   }

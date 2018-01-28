@@ -30,7 +30,7 @@ import org.apache.spark.streaming.Minutes
 //userid  100001
 //adid  100001
 
-object AdClidkRealTimeStatSpark {
+object AdClickRealTimeStatSpark {
   def main(args: Array[String]): Unit = {
 //    if (args.length < 5) {
 //      System.err.println("Usage: KafkaWordCount <zkQuorum> <group> <topics> <numThreads><masterUrl>")
@@ -41,7 +41,7 @@ object AdClidkRealTimeStatSpark {
 
 //    val Array(zkQuorum, group, numThreads, master) = args
 
-    val conf = new SparkConf().setAppName("AdClidkRealTimeStatSpark").setMaster("local[2]")
+    val conf = new SparkConf().setAppName("AdClickRealTimeStatSpark").setMaster("local[2]")
     val ssc = new StreamingContext(conf, Seconds(2))
     ssc.checkpoint("checkpoint")
 
@@ -120,6 +120,7 @@ object AdClidkRealTimeStatSpark {
         val list = new ArrayList[AdUserClickCount]
         while (iter.hasNext) {
           val tuple = iter.next()
+//          println(tuple._1 + "," + tuple._2)
           val adUserClickCount = new AdUserClickCount(tuple._1, tuple._2)
           list.add(adUserClickCount)
         }
