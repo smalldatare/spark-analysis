@@ -12,7 +12,7 @@ public class ConfigurationManagerTest {
 
   public static void main(String[] args) {
     String testkey1 = ConfigurationManager.getProperty("testkey1");
-    String testkey2 = ConfigurationManager.getProperty("testkey2");
+    String testkey2 = ConfigurationManager.getProperty("kafka.metadata.broker.list");
     System.out.println(testkey1);
     System.out.println(testkey2);
   }

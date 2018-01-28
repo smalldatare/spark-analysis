@@ -32,14 +32,14 @@ import org.apache.spark.streaming.Minutes
 
 object AdClidkRealTimeStatSpark {
   def main(args: Array[String]): Unit = {
-    if (args.length < 5) {
-      System.err.println("Usage: KafkaWordCount <zkQuorum> <group> <topics> <numThreads><masterUrl>")
-      System.exit(1)
-    }
+//    if (args.length < 5) {
+//      System.err.println("Usage: KafkaWordCount <zkQuorum> <group> <topics> <numThreads><masterUrl>")
+//      System.exit(1)
+//    }
 
     StreamingExamples.setStreamingLogLevels()
 
-    val Array(zkQuorum, group, numThreads, master) = args
+//    val Array(zkQuorum, group, numThreads, master) = args
 
     val conf = new SparkConf().setAppName("AdClidkRealTimeStatSpark").setMaster("local[2]")
     val ssc = new StreamingContext(conf, Seconds(2))
@@ -48,7 +48,8 @@ object AdClidkRealTimeStatSpark {
     //  val lines = KafkaUtils.createStream(ssc, zkQuorum, group, topicMap).map(_._2)
     val kafkaTopics = ConfigurationManager.getProperty(Constants.KAFKA_TOPICS)
     val topics = kafkaTopics.split(",").toSet
-    val kafkaParams = Map(Constants.KAFKA_METADATA_BROKER_LIST -> ConfigurationManager.getProperty(Constants.KAFKA_METADATA_BROKER_LIST))
+    val kafkaParams = Map(Constants.KAFKA_METADATA_BROKER_LIST -> ConfigurationManager.getProperty(Constants.KAFKA_METADATA_BROKER_LIST),
+                          "metadata.broker.list" -> ConfigurationManager.getProperty(Constants.KAFKA_METADATA_BROKER_LIST))
     val adRealTimeLogDStream: InputDStream[(String, String)] = KafkaUtils.createDirectStream[String, String, StringDecoder, StringDecoder](ssc, kafkaParams, topics)
 
     val filterAdRealTimeLogDStream = filterByBlacklist(adRealTimeLogDStream)
@@ -123,12 +124,12 @@ object AdClidkRealTimeStatSpark {
           list.add(adUserClickCount)
         }
         val adUserClickCountDAO = DAOFactory.getAdUserClickCountDAO();
-        adUserClickCountDAO.updateBatch(list);
+        adUserClickCountDAO.updateBatch(list)
       }
       }
     }
     //dailyUserAdClickCountDStream  聚合过，数据量减少了
-    val blacklistDStram = dailyUserAdClickCountDStream.filter { x =>
+    val blacklistDStram = dailyUserAdClickCountDStream.filter ( x =>{
       val key = x._1
       val keySplited = key.split("_")
       val date = DateUtils.formatDate(DateUtils.parseDateKey(keySplited(0)))
@@ -137,10 +138,10 @@ object AdClidkRealTimeStatSpark {
       val adUserClickCountDAO = DAOFactory.getAdUserClickCountDAO()
       val clickCount = adUserClickCountDAO.findClickCountByMultiKey(date, userid, adid)
       //如果点击量大于100，拉入黑名单
-      if (clickCount + x._2 > 100) return true
+      if (clickCount + x._2 > 100) true
       //否则，暂时不管它
-      false
-    }
+      else false
+    })
     // balcklistDStram 就是过滤出来对某个广告点击量超过100的用户。
     //遍历这个dstream中的每个rdd，然后将黑名单用户增加到mysql中
     //一旦增加以后，在整个这段程序前面，会加上根据署名单动态过滤用户的逻辑

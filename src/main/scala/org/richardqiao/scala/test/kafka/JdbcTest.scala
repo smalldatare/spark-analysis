@@ -12,12 +12,12 @@ object JdbcTest {
     val sqlContext = new SQLContext(sc);
     //    val jdbcDF = sqlContext.read.format("jdbc").options(
     ////        Map("url" -> "jdbc:postgresql:dbserver",
-    //             Map("url" -> "jdbc:mysql//localhost:3306/spark_project?user=root&password=123456",
+    //             Map("url" -> "jdbc:mysql//localhost:3306/sparkproject?user=root&password=123456",
     //        "dbtable" -> "task")).load()
     //jdbcDF.show
 
     val reader = sqlContext.read.format("jdbc")
-    reader.option("url", "jdbc:mysql//192.168.14.1:3306/spark_project")
+    reader.option("url", "jdbc:mysql//192.168.14.1:3306/sparkproject")
     reader.option("dbtable", "task")
     reader.option("driver", "com.mysql.jdbc.Driver")
     reader.option("user", "root")

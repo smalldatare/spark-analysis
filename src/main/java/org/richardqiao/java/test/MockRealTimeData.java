@@ -14,7 +14,7 @@ public class MockRealTimeData extends Thread {
 
   private static final Random random = new Random();
   private static final String[] provinces = new String[] { "Jiangsu", "Hubei", "Hunan", "Henan", "Hebei" };
-  private static final Map<String, String[]> provinceCityMap = new HashMap<String, String[]>();
+  private static final Map<String, String[]> provinceCityMap = new HashMap<>();
 
   private Producer<Integer, String> producer;
 
@@ -31,7 +31,7 @@ public class MockRealTimeData extends Thread {
   private ProducerConfig createProducerConfig() {
     Properties props = new Properties();
     props.put("serializer.class", "kafka.serializer.StringEncoder");
-    props.put("metadata.broker.list", "192.168.1.105:9092,192.168.1.106:9092,192.168.1.107:9092");
+    props.put("metadata.broker.list", "192.168.1.166:9092");
     return new ProducerConfig(props);
   }
 

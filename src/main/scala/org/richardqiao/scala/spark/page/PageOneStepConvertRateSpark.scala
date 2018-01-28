@@ -68,7 +68,7 @@ object PageOneStepConvertRateSpark {
       var lastPageId: Long = -1
       val list = new ArrayList[Tuple2[String, Long]]
       for (v <- visitList) {
-        val pageId = v.getAs[Long]("pageId")
+        val pageId = v.getAs[Long]("page_id")
         if (pageId == targetPages(0)) {
           startPageAccumulator.add(0)
         }

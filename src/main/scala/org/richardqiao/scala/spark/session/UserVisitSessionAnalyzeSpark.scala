@@ -134,7 +134,6 @@ object UserVisitSessionAnalyzeSpark {
     val accuValue = accumulator.value
     /**
      * 计算各session范围占比，并写入MySQL
-     * @param value
      */
     calculateAndPersistAggrStat(accuValue, task.getTaskid.toString());
 
@@ -191,9 +190,10 @@ object UserVisitSessionAnalyzeSpark {
   }
 
   /**
-   * 计算各session范围占比，并写入MySQL
-   * @param value
-   */
+    * 计算各session范围占比，并写入MySQL
+    * @param value
+    * @param taskid
+    */
   def calculateAndPersistAggrStat(value: String, taskid: String) = {
     // 从Accumulator统计串中获取值
     val session_count = StringUtils.getFieldFromConcatString(
