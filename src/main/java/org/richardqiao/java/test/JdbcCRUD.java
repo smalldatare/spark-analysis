@@ -70,7 +70,7 @@ public class JdbcCRUD {
       // 使用DriverManager.getConnection()方法获取针对数据库的连接
       // 需要给方法传入三个参数，包括url、user、password
       // 其中url就是有特定格式的数据库连接串，包括“主协议:子协议://主机名:端口号//数据库”
-      conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/sparkproject", "root", "root");
+      conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/sparkproject", "root", "");
 
       // 基于数据库连接Connection对象，创建SQL语句执行句柄，Statement对象
       // Statement对象，就是用来基于底层的Connection代表的数据库连接
@@ -113,7 +113,7 @@ public class JdbcCRUD {
     try {
       Class.forName("com.mysql.jdbc.Driver");
 
-      conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/sparkproject", "root", "root");
+      conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/sparkproject", "root", "");
       stmt = conn.createStatement();
 
       String sql = "update test_user set age=27 where name='李四'";
@@ -146,7 +146,7 @@ public class JdbcCRUD {
     try {
       Class.forName("com.mysql.jdbc.Driver");
 
-      conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/sparkproject", "root", "root");
+      conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/sparkproject", "root", "");
       stmt = conn.createStatement();
 
       String sql = "delete from test_user where name='李四'";
@@ -183,7 +183,7 @@ public class JdbcCRUD {
     try {
       Class.forName("com.mysql.jdbc.Driver");
 
-      conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/sparkproject", "root", "root");
+      conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/sparkproject", "root", "");
       stmt = conn.createStatement();
 
       String sql = "select * from test_user";
@@ -245,7 +245,7 @@ public class JdbcCRUD {
       Class.forName("com.mysql.jdbc.Driver");
 
       conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/sparkproject?characterEncoding=utf8",
-          "root", "root");
+          "root", "");
 
       // 第一个，SQL语句中，值所在的地方，都用问好代表
       String sql = "insert into test_user(name,age) values(?,?)";

@@ -22,9 +22,15 @@ public class NumberUtils {
    * @return 格式化小数
    */
   public static double formatDouble(double num, int scale) {
-    if(num == Double.NaN() || num == Double.NegativeInfinity() || num == Double.PositiveInfinity()) return 0d;
-    BigDecimal bd = new BigDecimal(num);
-    return bd.setScale(scale, BigDecimal.ROUND_HALF_UP).doubleValue();
+    try{
+      if(num == Double.NaN() || num == Double.NegativeInfinity() || num == Double.PositiveInfinity()) return 0d;
+      BigDecimal bd = new BigDecimal(num);
+      return bd.setScale(scale, BigDecimal.ROUND_HALF_UP).doubleValue();
+    }catch(Exception ex){
+//      System.out.println("Error:" + num);
+      ex.printStackTrace();
+    }
+    return 0d;
   }
 
 }

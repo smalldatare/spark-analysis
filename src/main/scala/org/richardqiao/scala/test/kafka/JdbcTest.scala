@@ -17,11 +17,11 @@ object JdbcTest {
     //jdbcDF.show
 
     val reader = sqlContext.read.format("jdbc")
-    reader.option("url", "jdbc:mysql//192.168.14.1:3306/sparkproject")
+    reader.option("url", "jdbc:mysql://localhost:3306/sparkproject")
     reader.option("dbtable", "task")
     reader.option("driver", "com.mysql.jdbc.Driver")
     reader.option("user", "root")
-    reader.option("password", "123456")
+    reader.option("password", "")
     val df = reader.load()
     df.show
 

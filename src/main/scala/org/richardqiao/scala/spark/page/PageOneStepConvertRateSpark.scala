@@ -99,7 +99,7 @@ object PageOneStepConvertRateSpark {
   def computePageSplitConvertRate(pageSplitPvMap: scala.collection.Map[String, Long], startPageCount: Long, pageFlow: String) = {
     val pages = pageFlow.split(",")
     val convertRateMap = scala.collection.mutable.HashMap[String, Double]()
-    for (i <- 1 to pages.length) {
+    for (i <- 1 until pages.length) {
       val targetPageSplit = pages(i - 1) + "_" + pages(i)
       val targetPageSplitPv = pageSplitPvMap.get(targetPageSplit)
       var convertRate = 0.0
@@ -110,7 +110,7 @@ object PageOneStepConvertRateSpark {
         convertRate = NumberUtils.formatDouble(targetPageSplitPv.getOrElse(0L) / lastPageSplitPv.toDouble, 2)
       }
       convertRateMap.put(targetPageSplit, convertRate)
-      lastPageSplitPv = targetPageSplitPv.get
+      lastPageSplitPv = targetPageSplitPv.getOrElse(0L)
     }
     convertRateMap
   }

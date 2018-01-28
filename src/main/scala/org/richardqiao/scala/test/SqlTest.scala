@@ -10,7 +10,7 @@ object SqlTest {
     val sqlContext = new org.apache.spark.sql.SQLContext(sc)
     // this is used to implicitly convert an RDD to a DataFrame.
     import sqlContext.implicits._
-    val df = sqlContext.read.json("examples/src/main/resources/people.json")
+    val df = sqlContext.read.json("src/main/resources/testdata/user_info")
     // Displays the content of the DataFrame to stdout
     df.show()
   }

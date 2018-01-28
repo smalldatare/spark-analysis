@@ -155,6 +155,7 @@ public class DateUtils {
    */
   public static Date parseTime(String time) {
     try {
+      if(time.equals("")) return null;
       return TIME_FORMAT.parse(time);
     } catch (ParseException e) {
       e.printStackTrace();

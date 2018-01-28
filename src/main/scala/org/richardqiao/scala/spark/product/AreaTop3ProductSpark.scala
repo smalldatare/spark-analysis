@@ -86,7 +86,14 @@ object AreaTop3ProductSpark {
     }
     val urlWithPwd = url + "?user=" + user + "&password=" + password
     println(urlWithPwd)
-    val cityInfoDf = sqlContext.read.jdbc(urlWithPwd, "city_info", new Properties())
+    val cityInfoDf = sqlContext.read.format("jdbc")
+      .option("url", urlWithPwd)
+      .option("driver", "com.mysql.jdbc.Driver")
+      .option("dbtable", "city_info")
+      .option("user", "root")
+      .option("password", "")
+      .load()
+//    val cityInfoDf = sqlContext.read.jdbc(urlWithPwd, "city_info", new Properties())
     cityInfoDf.printSchema()
     val cityId2CityInfo = cityInfoDf.map(row => (row.getInt(0).toLong, row))
     //    cityInfoDf.map(row=>(row.getAs("city_id"),row))
