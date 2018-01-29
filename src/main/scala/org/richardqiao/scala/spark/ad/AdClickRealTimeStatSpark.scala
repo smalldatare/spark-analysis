@@ -4,15 +4,17 @@ import org.apache.spark.streaming.StreamingContext
 import org.apache.spark.SparkConf
 import org.apache.spark.streaming.Seconds
 import org.apache.spark.streaming.kafka.KafkaUtils
+import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.richardqiao.scala.test.StreamingExamples
 import org.richardqiao.java.conf.ConfigurationManager
 import org.richardqiao.java.constant.Constants
 import kafka.serializer.StringDecoder
+import org.apache.kafka.common.serialization.StringDeserializer
 import org.apache.spark.streaming.dstream.InputDStream
-import java.util.Date
+import java.util.{ArrayList, Date, Properties}
+
 import org.richardqiao.java.util.DateUtils
 import org.richardqiao.java.domain.AdUserClickCount
-import java.util.ArrayList
 import org.richardqiao.java.dao.IAdUserClickCountDAO
 import org.richardqiao.java.dao.factory.DAOFactory
 import org.richardqiao.java.domain.AdBlacklist
@@ -48,9 +50,15 @@ object AdClickRealTimeStatSpark {
     //  val lines = KafkaUtils.createStream(ssc, zkQuorum, group, topicMap).map(_._2)
     val kafkaTopics = ConfigurationManager.getProperty(Constants.KAFKA_TOPICS)
     val topics = kafkaTopics.split(",").toSet
-    val kafkaParams = Map(Constants.KAFKA_METADATA_BROKER_LIST -> ConfigurationManager.getProperty(Constants.KAFKA_METADATA_BROKER_LIST),
-                          "metadata.broker.list" -> ConfigurationManager.getProperty(Constants.KAFKA_METADATA_BROKER_LIST))
-    val adRealTimeLogDStream: InputDStream[(String, String)] = KafkaUtils.createDirectStream[String, String, StringDecoder, StringDecoder](ssc, kafkaParams, topics)
+    val kafkaParams = Map(
+//      Constants.KAFKA_METADATA_BROKER_LIST -> ConfigurationManager.getProperty(Constants.KAFKA_METADATA_BROKER_LIST),
+      ConsumerConfig.GROUP_ID_CONFIG -> "group1",
+      ConsumerConfig.AUTO_OFFSET_RESET_CONFIG -> "largest",
+      ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG -> ConfigurationManager.getProperty(Constants.KAFKA_METADATA_BROKER_LIST),
+      ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG -> "false"
+    )
+    val adRealTimeLogDStream: InputDStream[(String, String)] =
+      KafkaUtils.createDirectStream[String, String, StringDecoder, StringDecoder](ssc, kafkaParams, topics)
 
     val filterAdRealTimeLogDStream = filterByBlacklist(adRealTimeLogDStream)
     // 生成动态黑名单

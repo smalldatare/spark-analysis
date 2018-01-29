@@ -234,12 +234,15 @@ public class JDBCHelper {
 
       pstmt = conn.prepareStatement(sql);
 
+      System.out.println(sql);
       // 第二步：使用PreparedStatement.addBatch()方法加入批量的SQL参数
       if (paramsList != null && paramsList.size() > 0) {
         for (Object[] params : paramsList) {
           for (int i = 0; i < params.length; i++) {
             pstmt.setObject(i + 1, params[i]);
+            System.out.print(params[i] + ", ");
           }
+          System.out.println();
           pstmt.addBatch();
         }
       }
